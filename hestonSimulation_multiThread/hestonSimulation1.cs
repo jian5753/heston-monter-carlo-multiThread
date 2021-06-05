@@ -44,16 +44,16 @@ namespace hestonSimulation_multiThread
         {
             InitializeComponent();
             #region default parameters;
-            s0 = 101.52;
+            s0 = 103.44;
             k = 100.0;
             var0 = 0.00770547621786487;
             rf = 0.001521;
             T = 1.0;
 
-            rho = -0.9;
-            kappa = 1.5;
-            theta = 0.04;
-            sigma = 0.3;
+            rho = -0.277814270110106;
+            kappa = 2.20366282736578;
+            theta = 0.0164951784035976;
+            sigma = 0.33220849746904;
 
             seed = 1234;
             pathCnt = 10000;
@@ -97,12 +97,8 @@ namespace hestonSimulation_multiThread
             int pathLen = (int)(365 * T);
             #endregion
 
-            VanillaCall testCall = new VanillaCall(s0, var0, k, T, rf);
-            VanillaPut testPut = new VanillaPut(s0, var0, k, T, rf);
-            MonteCarloSimulation_hestonModel simForCall =
-                new MonteCarloSimulation_hestonModel(testCall, rho, kappa, theta, sigma, pathLen);
-            MonteCarloSimulation_hestonModel simForPut =
-                new MonteCarloSimulation_hestonModel(testPut, rho, kappa, theta, sigma, pathLen);
+            VanillaCall theCall = new VanillaCall(s0, var0, k, T, rf, rho, kappa, theta, sigma);
+            VanillaPut thePut = new VanillaPut(s0, var0, k, T, rf, rho, kappa, theta, sigma);
 
             Stopwatch SW = new Stopwatch();
             SW.Start();
@@ -110,17 +106,36 @@ namespace hestonSimulation_multiThread
             if (seed == 0) { rv = new Random(); }
             else { rv = new Random(seed); };
 
-            double[] stArr = simForCall.DrawSt(pathCnt, rv);
-            double callPrice = simForCall.meanPrice(stArr, pathCnt);
-            double putPrice = simForPut.meanPrice(stArr, pathCnt);
-            textBox_callPrice.Text = callPrice.ToString("F4");
-            textBox_putPrice.Text = putPrice.ToString("F4");
+            double[] stArr = theCall.drawSt(pathLen, pathCnt);
 
+
+            double callSampleMean = theCall.priceSampleMean(stArr);
+            double putSampleMean = thePut.priceSampleMean(stArr);
+            textBox_callPrice.Text = callSampleMean.ToString("F4");
+            textBox_putPrice.Text = putSampleMean.ToString("F4");
 
             SW.Stop();
             double timeConsumption = SW.ElapsedMilliseconds;
-            msgBox.Text += $"done. time consumption {timeConsumption} ms.";
-            msgBox.Text += $"call price: {textBox_callPrice.Text}, put price: {textBox_putPrice.Text}. \n";
+            msgBox.Text += $"done. time consumption {timeConsumption} ms. ";
+            msgBox.Text += $"call price: {textBox_callPrice.Text} , put price: {textBox_putPrice.Text}. \n";
+
+            #region some theoritical verification
+            /*
+            double[] callPayoffs = new double[pathCnt];
+            double[] putPayoffs = new double[pathCnt];
+            double[] verify = new double[pathCnt];
+            for(int i = 0; i < pathCnt; i++)
+            {
+                callPayoffs[i] = theCall.payoff(stArr[i]);
+                putPayoffs[i] = thePut.payoff(stArr[i]);
+                verify[i] = callPayoffs[i] - putPayoffs[i] + k;
+            }*/
+
+            // put call parity
+            double parityLeft = putSampleMean + s0;
+            double parityRight = callSampleMean + k *  Math.Exp(-rf * T);
+            #endregion
+            msgBox.Text += "";
 
         }
 

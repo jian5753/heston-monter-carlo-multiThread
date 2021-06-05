@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using DFinNR;
 
 namespace hestonSimulation_multiThread
 {
@@ -26,28 +29,142 @@ namespace hestonSimulation_multiThread
         {
             return 0.0;
         }
-    }
 
-    class VanillaCall : VanillaOption
-    {
-        public VanillaCall(
-            double s0, double var0, double k, double T, double rf
-            ) : base(s0, var0, k, T, rf) { }
-
-        public VanillaCall() : base() { }
-        public override double payoff(double st)
+        public double priceSampleMean(double[] stArr)
         {
-            return Math.Max(st - k, 0);
+            double ans = 0;
+            #region parallized version (commentted out)
+            /*
+            Parallel.ForEach<double, double>(
+                payoffArr, () => 0.0, (j, loop, subtotal) =>
+            {
+                subtotal += payoff(j);
+                return subtotal;
+            },
+            (x) => { ans += x;  });
+            ans /= payoffArr.Length;
+            ans *= Math.Exp(-rf * T);
+            */
+            #endregion
+            double pi = 0;
+            foreach (double x in stArr)
+            {
+                pi = payoff(x);
+                ans += pi;
+            }
+            ans /= stArr.Length;
+            return ans /= Math.Exp(-rf * T);
+
+        }
+
+        public double priceSampleVar(double[] stArr)
+        {
+            double ans = 0;
+            double sampleMean = priceSampleMean(stArr);
+            #region parallized version (commentted out)
+            /*
+            Parallel.ForEach<double, double>(
+                payoffArr, () => 0.0, (j, loop, subtotal) =>
+                {
+                    subtotal += payoff(j) * payoff(j);
+                    return subtotal;
+                },
+            (x) => { ans += x; });
+            */
+            #endregion 
+
+            foreach (double x in stArr)
+            {
+                ans += Math.Pow(payoff(x) * Math.Exp(-rf * T) - sampleMean, 2);
+            }
+            ans /= stArr.Length;
+            return ans;
         }
     }
 
-    class VanillaPut : VanillaOption
+    class VanillaOption_heston : VanillaOption
+    {
+        private double rho;
+        private double kappa;
+        private double theta;
+        private double sigma;
+
+        public VanillaOption_heston() { }
+        public VanillaOption_heston
+        (
+            double s0, double var0, double k, double T, double rf,
+            double rho, double kappa, double theta, double sigma
+        ) : base(s0, var0, k, T, rf)
+        {
+            this.rho = rho;
+            this.kappa = kappa;
+            this.theta = theta;
+            this.sigma = sigma;
+        }
+
+        public double[] drawSt(int pathLen, int pathCnt)
+        {
+            double[] stArr = new double[pathCnt];
+
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, pathCnt), parallelOpts, range =>
+            {
+                double deltat = T / pathLen;
+                double sqrtdt = Math.Sqrt(deltat);
+                double Vt = var0;
+                double St = s0;
+                Random rv = new Random(range.Item1);
+                double z1;
+                double z2;
+                double sqrt1_rho2 = Math.Sqrt(1 - rho * rho);
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    for (int t = 0; t < pathLen; t++)
+                    {
+                        z1 = DStat.N_Inv(rv.NextDouble());
+                        z2 = DStat.N_Inv(rv.NextDouble());
+                        z2 = rho * z1 + sqrt1_rho2 * z1;
+
+                        St = St * Math.Exp((rf - 0.5 * Vt) * deltat + Math.Sqrt(Vt) * sqrtdt * z1);
+                        Vt = Math.Max(Vt + kappa * (theta - Vt) * deltat + sigma * Math.Sqrt(Vt) * sqrtdt * z2, 0);
+                    }
+                    stArr[i] = St;
+                    // reset st, vt when a path is done
+                    St = s0;
+                    Vt = var0;
+                }
+            });
+
+            return stArr;
+        }
+    }
+
+    class VanillaCall : VanillaOption_heston
+    {
+        public VanillaCall
+        (
+            double s0, double var0, double k, double T, double rf,
+            double rho, double kappa, double theta, double sigma
+        ) : base(s0, var0, k, T, rf, rho, kappa, theta, sigma) { }
+
+        public VanillaCall() : base() { }
+
+        public VanillaCall(double k) : base() { this.k = k; }
+
+        public override double payoff(double st) { return Math.Max(st - k, 0); }
+    }
+
+    class VanillaPut : VanillaOption_heston
     {
         public VanillaPut(
-            double s0, double v0, double k, double T, double rf
-            ) : base(s0, v0, k, T, rf) { }
+            double s0, double v0, double k, double T, double rf,
+            double rho, double kappa, double theta, double sigma
+            ) : base(s0, v0, k, T, rf, rho, kappa, theta, sigma) { }
 
         public VanillaPut() : base() { }
+
+        public VanillaPut(double k) : base() { this.k = k; }
 
         public override double payoff(double st)
         {

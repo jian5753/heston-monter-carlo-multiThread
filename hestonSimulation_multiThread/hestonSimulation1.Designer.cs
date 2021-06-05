@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.Simulation = new System.Windows.Forms.TabControl();
             this.priceTest2 = new System.Windows.Forms.TabPage();
             this.pricingResult = new System.Windows.Forms.GroupBox();
@@ -273,7 +273,7 @@
             this.textBox_sigma.Name = "textBox_sigma";
             this.textBox_sigma.Size = new System.Drawing.Size(226, 46);
             this.textBox_sigma.TabIndex = 8;
-            this.textBox_sigma.Text = "0.3";
+            this.textBox_sigma.Text = "0.33220849746904";
             // 
             // label7
             // 
@@ -298,7 +298,7 @@
             this.textBox_theta.Name = "textBox_theta";
             this.textBox_theta.Size = new System.Drawing.Size(226, 46);
             this.textBox_theta.TabIndex = 5;
-            this.textBox_theta.Text = "0.04";
+            this.textBox_theta.Text = "0.0164951784035976";
             // 
             // label9
             // 
@@ -324,7 +324,7 @@
             this.textBox_kappa.Name = "textBox_kappa";
             this.textBox_kappa.Size = new System.Drawing.Size(226, 46);
             this.textBox_kappa.TabIndex = 2;
-            this.textBox_kappa.Text = "1.5";
+            this.textBox_kappa.Text = "2.20366282736578";
             // 
             // label11
             // 
@@ -342,7 +342,7 @@
             this.textBox_rho.Name = "textBox_rho";
             this.textBox_rho.Size = new System.Drawing.Size(226, 46);
             this.textBox_rho.TabIndex = 0;
-            this.textBox_rho.Text = "-0.9";
+            this.textBox_rho.Text = "-0.277814270110106";
             // 
             // optionPara
             // 
@@ -448,7 +448,7 @@
             this.textBox_s0.Name = "textBox_s0";
             this.textBox_s0.Size = new System.Drawing.Size(226, 46);
             this.textBox_s0.TabIndex = 0;
-            this.textBox_s0.Text = "101.52";
+            this.textBox_s0.Text = "103.44";
             // 
             // pathPlot
             // 
@@ -467,23 +467,23 @@
             // chart_vPath
             // 
             this.chart_vPath.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisX.MajorGrid.Enabled = false;
-            chartArea1.AxisX.Minimum = 0D;
-            chartArea1.AxisY.LabelStyle.Format = "F4";
-            chartArea1.AxisY.LineColor = System.Drawing.Color.DimGray;
-            chartArea1.AxisY.MajorGrid.Enabled = false;
-            chartArea1.AxisY.Maximum = 100D;
-            chartArea1.AxisY.Minimum = 0D;
-            chartArea1.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.Name = "ChartArea1";
-            this.chart_vPath.ChartAreas.Add(chartArea1);
+            chartArea9.AxisX.MajorGrid.Enabled = false;
+            chartArea9.AxisX.Minimum = 0D;
+            chartArea9.AxisY.LabelStyle.Format = "F4";
+            chartArea9.AxisY.LineColor = System.Drawing.Color.DimGray;
+            chartArea9.AxisY.MajorGrid.Enabled = false;
+            chartArea9.AxisY.Maximum = 100D;
+            chartArea9.AxisY.Minimum = 0D;
+            chartArea9.BackColor = System.Drawing.Color.Transparent;
+            chartArea9.Name = "ChartArea1";
+            this.chart_vPath.ChartAreas.Add(chartArea9);
             this.chart_vPath.Cursor = System.Windows.Forms.Cursors.Default;
             this.chart_vPath.Location = new System.Drawing.Point(35, 378);
             this.chart_vPath.Name = "chart_vPath";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Name = "series_sPath";
-            this.chart_vPath.Series.Add(series1);
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series9.Name = "series_sPath";
+            this.chart_vPath.Series.Add(series9);
             this.chart_vPath.Size = new System.Drawing.Size(1311, 340);
             this.chart_vPath.TabIndex = 2;
             this.chart_vPath.Text = "chart1";
@@ -491,23 +491,23 @@
             // chart_sPath
             // 
             this.chart_sPath.BackColor = System.Drawing.Color.Transparent;
-            chartArea2.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-            chartArea2.AxisX.MajorGrid.Enabled = false;
-            chartArea2.AxisX.Minimum = 0D;
-            chartArea2.AxisY.LabelStyle.Format = "F4";
-            chartArea2.AxisY.LineColor = System.Drawing.Color.DimGray;
-            chartArea2.AxisY.MajorGrid.Enabled = false;
-            chartArea2.AxisY.Maximum = 100D;
-            chartArea2.AxisY.Minimum = 0D;
-            chartArea2.BackColor = System.Drawing.Color.Transparent;
-            chartArea2.Name = "ChartArea1";
-            this.chart_sPath.ChartAreas.Add(chartArea2);
+            chartArea10.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+            chartArea10.AxisX.MajorGrid.Enabled = false;
+            chartArea10.AxisX.Minimum = 0D;
+            chartArea10.AxisY.LabelStyle.Format = "F4";
+            chartArea10.AxisY.LineColor = System.Drawing.Color.DimGray;
+            chartArea10.AxisY.MajorGrid.Enabled = false;
+            chartArea10.AxisY.Maximum = 100D;
+            chartArea10.AxisY.Minimum = 0D;
+            chartArea10.BackColor = System.Drawing.Color.Transparent;
+            chartArea10.Name = "ChartArea1";
+            this.chart_sPath.ChartAreas.Add(chartArea10);
             this.chart_sPath.Location = new System.Drawing.Point(3, 58);
             this.chart_sPath.Name = "chart_sPath";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Name = "series_sPath";
-            this.chart_sPath.Series.Add(series2);
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series10.Name = "series_sPath";
+            this.chart_sPath.Series.Add(series10);
             this.chart_sPath.Size = new System.Drawing.Size(1343, 314);
             this.chart_sPath.TabIndex = 1;
             this.chart_sPath.Text = "chart1";
@@ -522,13 +522,13 @@
             this.button_drawPath.UseVisualStyleBackColor = true;
             this.button_drawPath.Click += new System.EventHandler(this.button_drawPath_Click);
             // 
-            // from1
+            // HestonSimulationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1378, 789);
             this.Controls.Add(this.Simulation);
-            this.Name = "from1";
+            this.Name = "HestonSimulationForm";
             this.Text = "heston model montecarlo simulation";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Simulation.ResumeLayout(false);
