@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using DFinNR;
@@ -32,6 +33,54 @@ namespace ParallelTest
         {
             return 0.0;
         }
+
+        public double priceSampleMean(double[] stArr)
+        {
+            double ans = 0;
+            #region parallized version (commentted out)
+            /*
+            Parallel.ForEach<double, double>(
+                payoffArr, () => 0.0, (j, loop, subtotal) =>
+            {
+                subtotal += payoff(j);
+                return subtotal;
+            },
+            (x) => { ans += x;  });
+            ans /= payoffArr.Length;
+            ans *= Math.Exp(-rf * T);
+            */
+            #endregion
+            foreach (double x in stArr){
+                ans += payoff(x);
+            }
+            ans /= stArr.Length;
+            return ans /= Math.Exp(-rf * T);
+
+        }
+
+        public double priceSampleVar(double[] stArr)
+        {
+            double ans = 0;
+            double sampleMean = priceSampleMean(stArr);
+            #region parallized version (commentted out)
+            /*
+            Parallel.ForEach<double, double>(
+                payoffArr, () => 0.0, (j, loop, subtotal) =>
+                {
+                    subtotal += payoff(j) * payoff(j);
+                    return subtotal;
+                },
+            (x) => { ans += x; });
+            */
+            #endregion 
+
+            foreach(double x in stArr)
+            {
+                ans += Math.Pow(payoff(x) * Math.Exp(-rf * T) - sampleMean, 2);
+            }
+            ans /= stArr.Length;
+            return ans;
+        }
     }
 
     class VanillaOption_heston : VanillaOption
@@ -40,6 +89,8 @@ namespace ParallelTest
         private double kappa;
         private double theta;
         private double sigma;
+
+        public VanillaOption_heston() { }
         public VanillaOption_heston
         (
             double s0, double var0, double k, double T, double rf,
@@ -90,98 +141,31 @@ namespace ParallelTest
         }
     }
 
-    class VanillaCall : VanillaOption
+    class VanillaCall : VanillaOption_heston
     {
-        private double rho;
-        private double kappa;
-        private double theta;
-        private double sigma;
-        private Mtrx downTri;
         public VanillaCall
         (
             double s0, double var0, double k, double T, double rf,
             double rho, double kappa, double theta, double sigma
-        ) : base(s0, var0, k, T, rf)
-        {
-            this.rho = rho;
-            this.kappa = kappa;
-            this.theta = theta;
-            this.sigma = sigma;
+        ) : base(s0, var0, k, T, rf, rho, kappa, theta, sigma) {}
 
-            double[,] corrData = { { 1, rho }, { rho, 1 } };
-            Mtrx testCorr = new Mtrx(2, 2, ref corrData);
-            downTri = testCorr.choleskyDecomp().T();
-        }
+        public VanillaCall() : base() { }
 
+        public VanillaCall(double k) : base() { this.k = k; }
 
-
-        public VanillaCall(double k) : base()
-        {
-            this.k = k;
-        }
-
-        public override double payoff(double st)
-        {
-            return Math.Max(st - k, 0);
-        }
-
-
-        public double payoff(ref Zmtrx scenario)
-        {
-            int length = scenario.getColCnt();
-            double deltat = T / length;
-            double sqrtdt = Math.Sqrt(deltat);
-            double[] vPath = new double[length + 1];
-            double[] sPath = new double[length + 1];
-
-
-            vPath[0] = var0;
-            sPath[0] = s0;
-
-            for (int t = 0; t < length; t++)
-            {
-                sPath[t + 1] = sPath[t] * Math.Exp((rf - 0.5 * vPath[t]) * deltat + Math.Sqrt(vPath[t]) * sqrtdt * scenario[0, t]);
-                vPath[t + 1] = Math.Max(vPath[t] + kappa * (theta - vPath[t]) * deltat + sigma * Math.Sqrt(vPath[t]) * sqrtdt * scenario[1, t], 0);
-            }
-
-            double sT = sPath[length];
-            //Console.Write($"{sT:F4}, ");
-            return payoff(sT);
-        }
-
-        public double payoff(Random rv, int length)
-        {
-            double deltat = T / length;
-            double sqrtdt = Math.Sqrt(deltat);
-            double[] vPath = new double[length + 1];
-            double[] sPath = new double[length + 1];
-
-
-            vPath[0] = var0;
-            sPath[0] = s0;
-
-            for (int t = 0; t < length; t++)
-            {
-                Zmtrx Zt_indep = new Zmtrx(2, 1, rv);
-                Mtrx Zt_corrlated = downTri.dot(Zt_indep);
-
-                sPath[t + 1] = sPath[t] * Math.Exp((rf - 0.5 * vPath[t]) * deltat + Math.Sqrt(vPath[t]) * sqrtdt * Zt_corrlated[0, 0]);
-                vPath[t + 1] = Math.Max(vPath[t] + kappa * (theta - vPath[t]) * deltat + sigma * Math.Sqrt(vPath[t]) * sqrtdt * Zt_corrlated[1, 0], 0);
-            }
-
-            double sT = sPath[length];
-            //Console.Write($"{sT:F4}, ");
-            return payoff(sT);
-        }
+        public override double payoff(double st) { return Math.Max(st - k, 0);}
     }
 
-    class VanillaPut : VanillaOption
+    class VanillaPut : VanillaOption_heston
     {
         public VanillaPut(
-            double s0, double v0, double k, double T, double rf
-            ) : base(s0, v0, k, T, rf) { }
+            double s0, double v0, double k, double T, double rf,
+            double rho, double kappa, double theta, double sigma
+            ) : base(s0, v0, k, T, rf, rho, kappa, theta, sigma) { }
 
         public VanillaPut() : base() { }
+
+        public VanillaPut(double k) : base() { this.k = k; }
 
         public override double payoff(double st)
         {
