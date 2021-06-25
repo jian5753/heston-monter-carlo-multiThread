@@ -27,13 +27,9 @@ namespace hestonSimulation_multiThread
 
         public virtual double payoff(double St)
         {
-            return 0.0;
-        }
-
-        public virtual double payoff(double[] St)
-        {
             throw new notImplementError("not implementation Err");
         }
+        
         public double[] payoffs(double[] stArr)
         {
             int length = stArr.Length;
@@ -52,29 +48,9 @@ namespace hestonSimulation_multiThread
 
         public double priceSampleMean(double[] stArr)
         {
-            double ans = 0;
-            #region parallized version (commentted out)
-            /*
-            Parallel.ForEach<double, double>(
-                payoffArr, () => 0.0, (j, loop, subtotal) =>
-            {
-                subtotal += payoff(j);
-                return subtotal;
-            },
-            (x) => { ans += x;  });
-            ans /= payoffArr.Length;
-            ans *= Math.Exp(-rf * T);
-            */
-            #endregion
-            double pi = 0;
-            foreach (double x in stArr)
-            {
-                pi = payoff(x);
-                ans += pi;
-            }
-            ans /= stArr.Length;
-            return ans /= Math.Exp(-rf * T);
-
+            double[] payoffArr = payoffs(stArr);
+            double mean = Utils.Mean(payoffArr);
+            return mean / Math.Exp(-rf * T);
         }
 
         public double priceSampleVar(double[] stArr)
@@ -99,14 +75,6 @@ namespace hestonSimulation_multiThread
             }
             ans /= stArr.Length;
             return ans;
-        }
-    }
-
-    class asian : VanillaOption
-    {
-        public override double payoff(double[] stPath)
-        {
-            return 0.0;
         }
     }
 
@@ -142,7 +110,8 @@ namespace hestonSimulation_multiThread
                 double sqrtdt = Math.Sqrt(deltat);
                 double Vt = var0;
                 double St = s0;
-                Random rv = new Random(range.Item1);
+                Random rv2 = new Random();
+                Random rv = new Random(range.Item1 + rv2.Next());
                 // need to change seed machanism in the fucture
                 double z1;
                 double z2;
@@ -180,8 +149,10 @@ namespace hestonSimulation_multiThread
                 double sqrtdt = Math.Sqrt(deltat);
                 double Vt = var0;
                 double St = s0;
-                Random rv = new Random(range.Item1);
+                Random rv2 = new Random();
+                Random rv = new Random(range.Item1 + rv2.Next());
                 // need to change seed machanism in the future
+
                 double z1;
                 double z2;
                 double sqrt1_rho2 = Math.Sqrt(1 - rho * rho);
@@ -220,7 +191,6 @@ namespace hestonSimulation_multiThread
 
         public override double payoff(double st) { return Math.Max(st - k, 0); }
     }
-
     class VanillaPut : VanillaOption_heston
     {
         public VanillaPut(

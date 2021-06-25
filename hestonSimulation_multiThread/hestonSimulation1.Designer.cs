@@ -75,6 +75,10 @@
             this.button_drawPath = new System.Windows.Forms.Button();
             this.testPage = new System.Windows.Forms.TabPage();
             this.buttonForTest = new System.Windows.Forms.Button();
+            this.asianOption = new System.Windows.Forms.TabPage();
+            this.textBox_asianFixCallPrice = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.aisanOption_price = new System.Windows.Forms.Button();
             this.Simulation.SuspendLayout();
             this.priceTest2.SuspendLayout();
             this.pricingResult.SuspendLayout();
@@ -86,12 +90,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.chart_vPath)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_sPath)).BeginInit();
             this.testPage.SuspendLayout();
+            this.asianOption.SuspendLayout();
             this.SuspendLayout();
             // 
             // Simulation
             // 
             this.Simulation.Controls.Add(this.priceTest2);
             this.Simulation.Controls.Add(this.pathPlot);
+            this.Simulation.Controls.Add(this.asianOption);
             this.Simulation.Controls.Add(this.testPage);
             this.Simulation.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Simulation.Location = new System.Drawing.Point(0, 0);
@@ -546,6 +552,44 @@
             this.buttonForTest.UseVisualStyleBackColor = true;
             this.buttonForTest.Click += new System.EventHandler(this.buttonForTest_Click);
             // 
+            // asianOption
+            // 
+            this.asianOption.Controls.Add(this.aisanOption_price);
+            this.asianOption.Controls.Add(this.label1);
+            this.asianOption.Controls.Add(this.textBox_asianFixCallPrice);
+            this.asianOption.Location = new System.Drawing.Point(8, 47);
+            this.asianOption.Name = "asianOption";
+            this.asianOption.Size = new System.Drawing.Size(1370, 743);
+            this.asianOption.TabIndex = 4;
+            this.asianOption.Text = "asian option";
+            this.asianOption.UseVisualStyleBackColor = true;
+            // 
+            // textBox_asianFixCallPrice
+            // 
+            this.textBox_asianFixCallPrice.Location = new System.Drawing.Point(139, 65);
+            this.textBox_asianFixCallPrice.Name = "textBox_asianFixCallPrice";
+            this.textBox_asianFixCallPrice.Size = new System.Drawing.Size(310, 46);
+            this.textBox_asianFixCallPrice.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(19, 68);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(98, 32);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "fix call";
+            // 
+            // aisanOption_price
+            // 
+            this.aisanOption_price.Location = new System.Drawing.Point(637, 55);
+            this.aisanOption_price.Name = "aisanOption_price";
+            this.aisanOption_price.Size = new System.Drawing.Size(208, 84);
+            this.aisanOption_price.TabIndex = 2;
+            this.aisanOption_price.Text = "price";
+            this.aisanOption_price.UseVisualStyleBackColor = true;
+            this.aisanOption_price.Click += new System.EventHandler(this.aisanOption_price_Click);
+            // 
             // HestonSimulationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
@@ -570,6 +614,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.chart_vPath)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_sPath)).EndInit();
             this.testPage.ResumeLayout(false);
+            this.asianOption.ResumeLayout(false);
+            this.asianOption.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -618,6 +664,10 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chart_vPath;
         private System.Windows.Forms.TabPage testPage;
         private System.Windows.Forms.Button buttonForTest;
+        private System.Windows.Forms.TabPage asianOption;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox_asianFixCallPrice;
+        private System.Windows.Forms.Button aisanOption_price;
     }
 }
 
