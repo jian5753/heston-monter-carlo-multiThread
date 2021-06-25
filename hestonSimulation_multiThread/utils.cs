@@ -81,19 +81,13 @@ namespace hestonSimulation_multiThread
 
         public static double Mean(double[] v)
         {
+            double n = v.Length;
             double ans = 0;
-            ParallelOptions parallelOpts = new ParallelOptions();
-            parallelOpts.MaxDegreeOfParallelism = 8;
-            Parallel.ForEach(Partitioner.Create(0, v.Length), parallelOpts, range =>
+            for(int i = 0; i < n; i++)
             {
-                double temp = 0;
-                for (int i = range.Item1; i < range.Item2; i++)
-                {
-                    temp += v[i];
-                }
-                ans += temp;
-            });
-            return ans / v.Length;
+                ans += v[i];
+            }
+            return ans / n;
         }
 
         public static double Var(double[] v)

@@ -199,7 +199,7 @@ namespace hestonSimulation_multiThread
                 (s0, var0, k, T, rf, rho, kappa, theta, sigma);
             AsianOptionFixCall asianfixCall = new AsianOptionFixCall
                 (s0, var0, k, T, rf, rho, kappa, theta, sigma);
-            Mtrx sPanel = simulator.drawSPath(10, 365);
+            Mtrx sPanel = simulator.drawSPath(pathCnt, 365);
             double asianFixCallPrice = asianfixCall.priceSampleMean(sPanel);
             textBox_asianFixCallPrice.Text = asianFixCallPrice.ToString("F4");
         }
