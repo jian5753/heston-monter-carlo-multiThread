@@ -2,9 +2,113 @@
 using DFinNR;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Concurrent;
+
 
 namespace hestonSimulation_multiThread
 {
+    class Utils
+    {
+        public static double[] Power(double[] v, double x)
+        {
+            double[] ans = new double[v.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = Math.Pow(v[i], x);
+                }
+            });
+            return ans;
+        }
+
+        public static double[] Add(double[] v1, double[] v2)
+        {
+            if (v1.Length != v2.Length)
+            {
+                throw new dimNotMatchException("v1.Length != v2.Length");
+            }
+
+            double[] ans = new double[v1.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v1.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = v1[i] + v2[i];
+                }
+            });
+            return ans;
+        }
+
+        public static double[] Sub(double[] v1, double c)
+        {
+            double[] ans = new double[v1.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v1.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = v1[i] - c;
+                }
+            });
+            return ans;
+        }
+
+        public static double[] Mul(double[] v1, double[] v2)
+        {
+            if (v1.Length != v2.Length)
+            {
+                throw new dimNotMatchException("v1.Length != v2.Length");
+            }
+
+            double[] ans = new double[v1.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v1.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = v1[i] * v2[i];
+                }
+            });
+            return ans;
+        }
+
+        public static double Mean(double[] v)
+        {
+            double ans = 0;
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v.Length), parallelOpts, range =>
+            {
+                double temp = 0;
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    temp += v[i];
+                }
+                ans += temp;
+            });
+            return ans / v.Length;
+        }
+
+        public static double Var(double[] v)
+        {
+            double vBar = Mean(v);
+            return Mean(Power(Sub(v, vBar), 2));
+        }
+
+        public static double Cov(double[] v1, double[] v2)
+        {
+            double v1Bar = Mean(v1);
+            double v2Bar = Mean(v2);
+            return Mean(Mul(Sub(v1, v1Bar), Sub(v2, v2Bar)));
+        }
+    }
     class Mtrx
     {
         protected int rowCnt;
@@ -21,6 +125,13 @@ namespace hestonSimulation_multiThread
         {
             this.rowCnt = rowCnt;
             this.colCnt = colCnt;
+            this.data = data;
+        }
+
+        public Mtrx(ref double[,] data)
+        {
+            this.rowCnt = data.GetLength(0);
+            this.colCnt = data.GetLength(1);
             this.data = data;
         }
 

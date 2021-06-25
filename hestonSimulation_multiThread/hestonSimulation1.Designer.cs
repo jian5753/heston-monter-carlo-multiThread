@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.Simulation = new System.Windows.Forms.TabControl();
             this.priceTest2 = new System.Windows.Forms.TabPage();
             this.pricingResult = new System.Windows.Forms.GroupBox();
@@ -73,6 +73,8 @@
             this.chart_vPath = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chart_sPath = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.button_drawPath = new System.Windows.Forms.Button();
+            this.testPage = new System.Windows.Forms.TabPage();
+            this.buttonForTest = new System.Windows.Forms.Button();
             this.Simulation.SuspendLayout();
             this.priceTest2.SuspendLayout();
             this.pricingResult.SuspendLayout();
@@ -83,12 +85,14 @@
             this.pathPlot.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart_vPath)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_sPath)).BeginInit();
+            this.testPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // Simulation
             // 
             this.Simulation.Controls.Add(this.priceTest2);
             this.Simulation.Controls.Add(this.pathPlot);
+            this.Simulation.Controls.Add(this.testPage);
             this.Simulation.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Simulation.Location = new System.Drawing.Point(0, 0);
             this.Simulation.Name = "Simulation";
@@ -467,23 +471,23 @@
             // chart_vPath
             // 
             this.chart_vPath.BackColor = System.Drawing.Color.Transparent;
-            chartArea9.AxisX.MajorGrid.Enabled = false;
-            chartArea9.AxisX.Minimum = 0D;
-            chartArea9.AxisY.LabelStyle.Format = "F4";
-            chartArea9.AxisY.LineColor = System.Drawing.Color.DimGray;
-            chartArea9.AxisY.MajorGrid.Enabled = false;
-            chartArea9.AxisY.Maximum = 100D;
-            chartArea9.AxisY.Minimum = 0D;
-            chartArea9.BackColor = System.Drawing.Color.Transparent;
-            chartArea9.Name = "ChartArea1";
-            this.chart_vPath.ChartAreas.Add(chartArea9);
+            chartArea1.AxisX.MajorGrid.Enabled = false;
+            chartArea1.AxisX.Minimum = 0D;
+            chartArea1.AxisY.LabelStyle.Format = "F4";
+            chartArea1.AxisY.LineColor = System.Drawing.Color.DimGray;
+            chartArea1.AxisY.MajorGrid.Enabled = false;
+            chartArea1.AxisY.Maximum = 100D;
+            chartArea1.AxisY.Minimum = 0D;
+            chartArea1.BackColor = System.Drawing.Color.Transparent;
+            chartArea1.Name = "ChartArea1";
+            this.chart_vPath.ChartAreas.Add(chartArea1);
             this.chart_vPath.Cursor = System.Windows.Forms.Cursors.Default;
             this.chart_vPath.Location = new System.Drawing.Point(35, 378);
             this.chart_vPath.Name = "chart_vPath";
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series9.Name = "series_sPath";
-            this.chart_vPath.Series.Add(series9);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Name = "series_sPath";
+            this.chart_vPath.Series.Add(series1);
             this.chart_vPath.Size = new System.Drawing.Size(1311, 340);
             this.chart_vPath.TabIndex = 2;
             this.chart_vPath.Text = "chart1";
@@ -491,23 +495,23 @@
             // chart_sPath
             // 
             this.chart_sPath.BackColor = System.Drawing.Color.Transparent;
-            chartArea10.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-            chartArea10.AxisX.MajorGrid.Enabled = false;
-            chartArea10.AxisX.Minimum = 0D;
-            chartArea10.AxisY.LabelStyle.Format = "F4";
-            chartArea10.AxisY.LineColor = System.Drawing.Color.DimGray;
-            chartArea10.AxisY.MajorGrid.Enabled = false;
-            chartArea10.AxisY.Maximum = 100D;
-            chartArea10.AxisY.Minimum = 0D;
-            chartArea10.BackColor = System.Drawing.Color.Transparent;
-            chartArea10.Name = "ChartArea1";
-            this.chart_sPath.ChartAreas.Add(chartArea10);
+            chartArea2.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+            chartArea2.AxisX.MajorGrid.Enabled = false;
+            chartArea2.AxisX.Minimum = 0D;
+            chartArea2.AxisY.LabelStyle.Format = "F4";
+            chartArea2.AxisY.LineColor = System.Drawing.Color.DimGray;
+            chartArea2.AxisY.MajorGrid.Enabled = false;
+            chartArea2.AxisY.Maximum = 100D;
+            chartArea2.AxisY.Minimum = 0D;
+            chartArea2.BackColor = System.Drawing.Color.Transparent;
+            chartArea2.Name = "ChartArea1";
+            this.chart_sPath.ChartAreas.Add(chartArea2);
             this.chart_sPath.Location = new System.Drawing.Point(3, 58);
             this.chart_sPath.Name = "chart_sPath";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.Name = "series_sPath";
-            this.chart_sPath.Series.Add(series10);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Name = "series_sPath";
+            this.chart_sPath.Series.Add(series2);
             this.chart_sPath.Size = new System.Drawing.Size(1343, 314);
             this.chart_sPath.TabIndex = 1;
             this.chart_sPath.Text = "chart1";
@@ -521,6 +525,26 @@
             this.button_drawPath.Text = "draw path";
             this.button_drawPath.UseVisualStyleBackColor = true;
             this.button_drawPath.Click += new System.EventHandler(this.button_drawPath_Click);
+            // 
+            // testPage
+            // 
+            this.testPage.Controls.Add(this.buttonForTest);
+            this.testPage.Location = new System.Drawing.Point(8, 47);
+            this.testPage.Name = "testPage";
+            this.testPage.Size = new System.Drawing.Size(1370, 743);
+            this.testPage.TabIndex = 3;
+            this.testPage.Text = "testPage";
+            this.testPage.UseVisualStyleBackColor = true;
+            // 
+            // buttonForTest
+            // 
+            this.buttonForTest.Location = new System.Drawing.Point(49, 40);
+            this.buttonForTest.Name = "buttonForTest";
+            this.buttonForTest.Size = new System.Drawing.Size(361, 77);
+            this.buttonForTest.TabIndex = 0;
+            this.buttonForTest.Text = "mother fucker";
+            this.buttonForTest.UseVisualStyleBackColor = true;
+            this.buttonForTest.Click += new System.EventHandler(this.buttonForTest_Click);
             // 
             // HestonSimulationForm
             // 
@@ -545,6 +569,7 @@
             this.pathPlot.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart_vPath)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_sPath)).EndInit();
+            this.testPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -591,6 +616,8 @@
         private System.Windows.Forms.Button button_drawPath;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart_sPath;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart_vPath;
+        private System.Windows.Forms.TabPage testPage;
+        private System.Windows.Forms.Button buttonForTest;
     }
 }
 

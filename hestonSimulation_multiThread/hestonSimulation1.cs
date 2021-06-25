@@ -177,5 +177,20 @@ namespace hestonSimulation_multiThread
 
 
         }
+
+        private void buttonForTest_Click(object sender, EventArgs e)
+        {
+            Stopwatch SW = new Stopwatch();
+            SW.Start();
+            VanillaOption_AmrcCall testInstance = new VanillaOption_AmrcCall(s0, var0, k, T, rf, rho, kappa, theta, sigma);
+            Mtrx tempMtrx = testInstance.drawSPath(10, 365);
+            SW.Stop();
+            double t1 = SW.ElapsedMilliseconds;
+            SW.Restart();
+            double ans = testInstance.meanPrice(ref tempMtrx);
+            SW.Stop();
+            double t2 = SW.ElapsedMilliseconds;
+
+        }
     }
 }

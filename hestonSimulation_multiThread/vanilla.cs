@@ -30,6 +30,26 @@ namespace hestonSimulation_multiThread
             return 0.0;
         }
 
+        public virtual double payoff(double[] St)
+        {
+            throw new notImplementError("not implementation Err");
+        }
+        public double[] payoffs(double[] stArr)
+        {
+            int length = stArr.Length;
+            double[] payoffArr = new double[length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, stArr.Length), parallelOpts, range =>
+            {
+                for(int i = range.Item1; i < range.Item2; i++)
+                {
+                    payoffArr[i] = this.payoff(stArr[i]);
+                }
+            });
+            return payoffArr;
+        }
+
         public double priceSampleMean(double[] stArr)
         {
             double ans = 0;
@@ -82,12 +102,20 @@ namespace hestonSimulation_multiThread
         }
     }
 
+    class asian : VanillaOption
+    {
+        public override double payoff(double[] stPath)
+        {
+            return 0.0;
+        }
+    }
+
     class VanillaOption_heston : VanillaOption
     {
-        private double rho;
-        private double kappa;
-        private double theta;
-        private double sigma;
+        protected double rho;
+        protected double kappa;
+        protected double theta;
+        protected double sigma;
 
         public VanillaOption_heston() { }
         public VanillaOption_heston
@@ -115,6 +143,7 @@ namespace hestonSimulation_multiThread
                 double Vt = var0;
                 double St = s0;
                 Random rv = new Random(range.Item1);
+                // need to change seed machanism in the fucture
                 double z1;
                 double z2;
                 double sqrt1_rho2 = Math.Sqrt(1 - rho * rho);
@@ -138,8 +167,45 @@ namespace hestonSimulation_multiThread
 
             return stArr;
         }
-    }
 
+        public Mtrx drawSPath(int pathCnt, int pathLen)
+        {
+            double[,] stArr = new double[pathCnt, pathLen + 1];
+
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, pathCnt), parallelOpts, range =>
+            {
+                double deltat = T / pathLen;
+                double sqrtdt = Math.Sqrt(deltat);
+                double Vt = var0;
+                double St = s0;
+                Random rv = new Random(range.Item1);
+                // need to change seed machanism in the future
+                double z1;
+                double z2;
+                double sqrt1_rho2 = Math.Sqrt(1 - rho * rho);
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    stArr[i, 0] = s0;
+                    for (int t = 0; t < pathLen; t++)
+                    {
+                        z1 = DStat.N_Inv(rv.NextDouble());
+                        z2 = DStat.N_Inv(rv.NextDouble());
+                        z2 = rho * z1 + sqrt1_rho2 * z1;
+
+                        St = St * Math.Exp((rf - 0.5 * Vt) * deltat + Math.Sqrt(Vt) * sqrtdt * z1);
+                        stArr[i, t + 1] = St;
+                        Vt = Math.Max(Vt + kappa * (theta - Vt) * deltat + sigma * Math.Sqrt(Vt) * sqrtdt * z2, 0);
+                    }
+                    // reset st, vt when a path is done
+                    St = s0;
+                    Vt = var0;
+                }
+            });
+            return new Mtrx(ref stArr);
+        }
+    }
     class VanillaCall : VanillaOption_heston
     {
         public VanillaCall
