@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
-using DFinNR;
 
 namespace hestonSimulation_multiThread
 {
-    class VanillaOption
+    class BSMoption
     {
         #region attributes
         protected double s0; protected double var0; protected double k;
         protected double T; protected double rf;
         #endregion
         #region constructors
-        public VanillaOption()
+        public BSMoption()
         {
             s0 = 0.0; var0 = 0.0; k = 0.0; T = 0.0; rf = 0.0;
         }
-        public VanillaOption(double s0, double var0, double k, double T, double rf)
+        public BSMoption(double s0, double var0, double k, double T, double rf)
         {
             this.s0 = s0; this.var0 = var0; this.k = k; this.T = T; this.rf = rf;
         }
@@ -48,6 +47,8 @@ namespace hestonSimulation_multiThread
             });
             return payoffArr;
         }
+        #endregion
+        #region pricing
         public double priceSampleMean(double[] stArr)
         {
             double[] payoffArr = payoffs(stArr);
@@ -77,10 +78,27 @@ namespace hestonSimulation_multiThread
             ans /= stArr.Length;
             return ans;
         }
+        public double AmrcPrice(Mtrx sPanel)
+        {
+            int pathLen = sPanel.getColCnt();
+            double deltaT = T / pathLen;
+            double dsctFactor = Math.Exp(-rf * deltaT);
+            QuadraticRegression regression = new QuadraticRegression();
+
+            double[] y = Utils.Mul(payoffs(sPanel.getCol(pathLen - 1)), dsctFactor);
+            for (int i = 1; i < pathLen - 1; i++)
+            {
+                double[] x = sPanel.getCol(pathLen - i - 1);
+                regression.fit(y, x);
+                double[] holdingValue = regression.predict(x);
+                double[] exerciseValue = payoffs(x);
+                y = Utils.Max(holdingValue, exerciseValue);
+            }
+            return Utils.Mean(y);
+        }
         #endregion
     }
-
-    class VanillaOption_heston : VanillaOption
+    class HestonOption : BSMoption
     {
         #region attributes
         protected double rho;
@@ -89,8 +107,8 @@ namespace hestonSimulation_multiThread
         protected double sigma;
         #endregion
         #region constructors
-        public VanillaOption_heston() { }
-        public VanillaOption_heston
+        public HestonOption() { }
+        public HestonOption
         (
             double s0, double var0, double k, double T, double rf,
             double rho, double kappa, double theta, double sigma
@@ -109,30 +127,30 @@ namespace hestonSimulation_multiThread
         public double getSigma() { return sigma; }
         #endregion
     }
-    class VanillaCall : VanillaOption_heston
+    class VanillaCall_heston : HestonOption
     {
-        public VanillaCall
+        public VanillaCall_heston
         (
             double s0, double var0, double k, double T, double rf,
             double rho, double kappa, double theta, double sigma
         ) : base(s0, var0, k, T, rf, rho, kappa, theta, sigma) { }
 
-        public VanillaCall() : base() { }
+        public VanillaCall_heston() : base() { }
 
-        public VanillaCall(double k) : base() { this.k = k; }
+        public VanillaCall_heston(double k) : base() { this.k = k; }
 
         public override double payoff(double st) { return Math.Max(st - k, 0); }
     }
-    class VanillaPut : VanillaOption_heston
+    class VanillaPut_heston : HestonOption
     {
-        public VanillaPut(
+        public VanillaPut_heston(
             double s0, double v0, double k, double T, double rf,
             double rho, double kappa, double theta, double sigma
             ) : base(s0, v0, k, T, rf, rho, kappa, theta, sigma) { }
 
-        public VanillaPut() : base() { }
+        public VanillaPut_heston() : base() { }
 
-        public VanillaPut(double k) : base() { this.k = k; }
+        public VanillaPut_heston(double k) : base() { this.k = k; }
 
         public override double payoff(double st)
         {

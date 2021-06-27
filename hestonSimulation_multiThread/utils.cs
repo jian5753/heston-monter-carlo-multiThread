@@ -23,7 +23,6 @@ namespace hestonSimulation_multiThread
             });
             return ans;
         }
-
         public static double[] Add(double[] v1, double[] v2)
         {
             if (v1.Length != v2.Length)
@@ -43,7 +42,6 @@ namespace hestonSimulation_multiThread
             });
             return ans;
         }
-
         public static double[] Sub(double[] v1, double c)
         {
             double[] ans = new double[v1.Length];
@@ -58,7 +56,6 @@ namespace hestonSimulation_multiThread
             });
             return ans;
         }
-
         public static double[] Mul(double[] v1, double[] v2)
         {
             if (v1.Length != v2.Length)
@@ -78,7 +75,20 @@ namespace hestonSimulation_multiThread
             });
             return ans;
         }
-
+        public static double[] Mul(double[] v1, double c)
+        {
+            double[] ans = new double[v1.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v1.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = v1[i] * c;
+                }
+            });
+            return ans;
+        }
         public static double Mean(double[] v)
         {
             double n = v.Length;
@@ -99,18 +109,35 @@ namespace hestonSimulation_multiThread
             }
             return ans;
         }
-
         public static double Var(double[] v)
         {
             double vBar = Mean(v);
             return Mean(Power(Sub(v, vBar), 2));
         }
-
         public static double Cov(double[] v1, double[] v2)
         {
             double v1Bar = Mean(v1);
             double v2Bar = Mean(v2);
             return Mean(Mul(Sub(v1, v1Bar), Sub(v2, v2Bar)));
+        }
+        public static double[] Max(double[] v1, double[] v2)
+        {
+            if (v1.Length != v2.Length)
+            {
+                throw new dimNotMatchException("v1.Length != v2.Length");
+            }
+
+            double[] ans = new double[v1.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v1.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = Math.Max(v1[i], v2[i]);
+                }
+            });
+            return ans;
         }
     }
     class Mtrx

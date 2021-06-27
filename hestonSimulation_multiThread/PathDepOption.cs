@@ -8,13 +8,14 @@ using DFinNR;
 
 namespace hestonSimulation_multiThread
 {
-    class PathDepOption : VanillaOption
+    class PathDepOption_heston : HestonOption
     {
         #region constructors
-        public PathDepOption
+        public PathDepOption_heston
         (
-            double s0, double var0, double k, double T, double rf
-        ) : base(s0, var0, k, T, rf) { }
+            double s0, double var0, double k, double T, double rf,
+            double rho, double kappa, double theta, double sigma
+        ) : base(s0, var0, k, T, rf, rho, kappa, theta, sigma) { }
         #endregion
         #region hide path indep payoff function
         public override double payoff(double St)
@@ -55,29 +56,6 @@ namespace hestonSimulation_multiThread
             double[] payoffArr = payoffs(sPanel);
             double mean = Utils.Mean(payoffArr);
             return mean / Math.Exp(-rf * T);
-        }
-        #endregion
-    }
-
-    class PathDepOption_heston : PathDepOption
-    {
-        #region attributes
-        protected double rho;
-        protected double kappa;
-        protected double theta;
-        protected double sigma;
-        #endregion
-        #region constructors
-        public PathDepOption_heston
-        (
-            double s0, double var0, double k, double T, double rf,
-            double rho, double kappa, double theta, double sigma
-        ) : base(s0, var0, k, T, rf)
-        {
-            this.rho = rho;
-            this.kappa = kappa;
-            this.theta = theta;
-            this.sigma = sigma;
         }
         #endregion
     }

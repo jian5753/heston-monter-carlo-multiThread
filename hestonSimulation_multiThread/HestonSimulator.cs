@@ -31,7 +31,7 @@ namespace hestonSimulation_multiThread
             this.s0 = s0; this.var0 = var0; this.k = k; this.T = T; this.rf = rf;
             this.rho = rho; this.kappa = kappa; this.theta = theta; this.sigma = sigma;
         }
-        public HestonSimulator(VanillaOption_heston theOption)
+        public HestonSimulator(HestonOption theOption)
         {
 
             s0 = theOption.getS0();
@@ -46,7 +46,8 @@ namespace hestonSimulation_multiThread
         }
         #endregion;
         #region simulation
-        public double[] drawSt(int pathLen, int pathCnt)
+
+        public double[] drawSt(int pathCnt, int pathLen)
         {
             double[] stArr = new double[pathCnt];
 

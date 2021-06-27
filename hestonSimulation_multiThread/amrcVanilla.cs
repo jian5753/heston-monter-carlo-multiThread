@@ -7,7 +7,7 @@ using System.Collections.Concurrent;
 
 namespace hestonSimulation_multiThread
 {
-    class VanillaOption_AmrcCall : VanillaOption_heston
+    class VanillaOption_AmrcCall : HestonOption
     {
         public VanillaOption_AmrcCall
         (

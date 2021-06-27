@@ -96,8 +96,8 @@ namespace hestonSimulation_multiThread
             int pathLen = (int)(365 * T);
             #endregion
 
-            VanillaCall theCall = new VanillaCall(s0, var0, k, T, rf, rho, kappa, theta, sigma);
-            VanillaPut thePut = new VanillaPut(s0, var0, k, T, rf, rho, kappa, theta, sigma);
+            VanillaCall_heston theCall = new VanillaCall_heston(s0, var0, k, T, rf, rho, kappa, theta, sigma);
+            VanillaPut_heston thePut = new VanillaPut_heston(s0, var0, k, T, rf, rho, kappa, theta, sigma);
             HestonSimulator simulator = new HestonSimulator(theCall);
 
             Stopwatch SW = new Stopwatch();
@@ -106,11 +106,12 @@ namespace hestonSimulation_multiThread
             if (seed == 0) { rv = new Random(); }
             else { rv = new Random(seed); };
 
-            double[] stArr = simulator.drawSt(pathLen, pathCnt);
-
+            double[] stArr = simulator.drawSt(pathCnt, pathLen);
+            Mtrx sPanel = simulator.drawSPath(pathCnt, pathLen);
 
             double callSampleMean = theCall.priceSampleMean(stArr);
             double putSampleMean = thePut.priceSampleMean(stArr);
+            double test = theCall.AmrcPrice(sPanel);
             textBox_callPrice.Text = callSampleMean.ToString("F4");
             textBox_putPrice.Text = putSampleMean.ToString("F4");
 
@@ -132,8 +133,8 @@ namespace hestonSimulation_multiThread
             }*/
 
             // put call parity
-            double parityLeft = putSampleMean + s0;
-            double parityRight = callSampleMean + k *  Math.Exp(-rf * T);
+            //double parityLeft = putSampleMean + s0;
+            //double parityRight = callSampleMean + k *  Math.Exp(-rf * T);
             #endregion
             msgBox.Text += "";
 
@@ -156,7 +157,7 @@ namespace hestonSimulation_multiThread
             int pathLen = (int)(365 * T);
 
             #region draw path 
-            VanillaOption forPath = new VanillaOption(s0, var0, k, T, rf);
+            BSMoption forPath = new BSMoption(s0, var0, k, T, rf);
             HestonSimulator pathSim = new HestonSimulator(s0, var0, k, T, rf, rho, kappa, theta, sigma);
 
             double[][] sAndvPath = pathSim.drawSandVPath(pathLen);
