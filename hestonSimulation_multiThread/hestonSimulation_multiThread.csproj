@@ -69,7 +69,7 @@
     <Compile Include="PathDepOption.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="simulator.cs" />
+    <Compile Include="HestonSimulator.cs" />
     <Compile Include="utilException.cs" />
     <Compile Include="utils.cs" />
     <Compile Include="vanilla.cs" />

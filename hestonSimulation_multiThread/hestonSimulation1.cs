@@ -157,9 +157,9 @@ namespace hestonSimulation_multiThread
 
             #region draw path 
             VanillaOption forPath = new VanillaOption(s0, var0, k, T, rf);
-            MonteCarloSimulation_hestonModel pathSim
-                = new MonteCarloSimulation_hestonModel(forPath, rho, kappa, theta, sigma, pathLen);
-            double[][] sAndvPath = pathSim.drawSandVPath(rv);
+            HestonSimulator pathSim = new HestonSimulator(s0, var0, k, T, rf, rho, kappa, theta, sigma);
+
+            double[][] sAndvPath = pathSim.drawSandVPath(pathLen);
             #endregion
 
             for (int i = 0; i < pathLen; i++)

@@ -28,12 +28,11 @@ namespace hestonSimulation_multiThread
         public double getRf() { return rf; }
         public double getT() { return T; }
         #endregion
-
+        #region payoff
         public virtual double payoff(double St)
         {
             throw new notImplementError("not implementation Err");
-        }
-        
+        } 
         public double[] payoffs(double[] stArr)
         {
             int length = stArr.Length;
@@ -49,14 +48,12 @@ namespace hestonSimulation_multiThread
             });
             return payoffArr;
         }
-
         public double priceSampleMean(double[] stArr)
         {
             double[] payoffArr = payoffs(stArr);
             double mean = Utils.Mean(payoffArr);
             return mean / Math.Exp(-rf * T);
         }
-
         public double priceSampleVar(double[] stArr)
         {
             double ans = 0;
@@ -80,6 +77,7 @@ namespace hestonSimulation_multiThread
             ans /= stArr.Length;
             return ans;
         }
+        #endregion
     }
 
     class VanillaOption_heston : VanillaOption
