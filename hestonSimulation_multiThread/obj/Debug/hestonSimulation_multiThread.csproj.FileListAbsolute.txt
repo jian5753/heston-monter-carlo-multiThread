@@ -9,3 +9,15 @@ C:\Users\jian5\OneDrive\桌面\courses\2021spring\finAlgorithm\finalTermProject\
 C:\Users\jian5\OneDrive\桌面\courses\2021spring\finAlgorithm\finalTermProject\hestonSimulation_multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.exe
 C:\Users\jian5\OneDrive\桌面\courses\2021spring\finAlgorithm\finalTermProject\hestonSimulation_multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.pdb
 C:\Users\jian5\OneDrive\桌面\courses\2021spring\finAlgorithm\finalTermProject\hestonSimulation_multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.HestonSimulationForm.resources
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\bin\Debug\hestonSimulation_multiThread.exe.config
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\bin\Debug\hestonSimulation_multiThread.exe
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\bin\Debug\hestonSimulation_multiThread.pdb
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\bin\Debug\FinNRCSLib.pdb
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.csprojAssemblyReference.cache
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.HestonSimulationForm.resources
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.Properties.Resources.resources
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.csproj.GenerateResource.cache
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.csproj.CoreCompileInputs.cache
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.csproj.CopyComplete
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.exe
+C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.pdb

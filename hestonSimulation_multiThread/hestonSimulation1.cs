@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using DFinNR;
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-using System.Diagnostics;
-using DFinNR;
 
 namespace hestonSimulation_multiThread
 {
@@ -195,13 +194,98 @@ namespace hestonSimulation_multiThread
 
         private void aisanOption_price_Click(object sender, EventArgs e)
         {
+            #region parse input
+            try { s0 = double.Parse(textBox_s0.Text); label26.Text = s0.ToString(); } catch { };
+            try { k = double.Parse(textBox_k.Text); label34.Text = k.ToString(); } catch { };
+            try { var0 = double.Parse(textBox_var0.Text); label33.Text = var0.ToString(); } catch { };
+            try { T = double.Parse(textBox_T.Text); label32.Text = T.ToString(); } catch { };
+            try { rf = double.Parse(textBox_rf.Text); label27.Text = rf.ToString(); } catch { };
+
+            try { rho = double.Parse(textBox_rho.Text); label28.Text = rho.ToString(); } catch { };
+            try { kappa = double.Parse(textBox_kappa.Text); label29.Text = kappa.ToString(); } catch { };
+            try { theta = double.Parse(textBox_theta.Text); label30.Text = theta.ToString(); } catch { };
+            try { sigma = double.Parse(textBox_sigma.Text); label31.Text = sigma.ToString(); } catch { };
+
+            try { pathCnt = int.Parse(textBox_pathCnt.Text); } catch { };
+            try { seed = int.Parse(textBox_seed.Text); } catch { seed = 0; };
+
+            int pathLen = (int)(365 * T);
+            #endregion
+
             VanillaOption_heston simulator = new VanillaOption_heston
-                (s0, var0, k, T, rf, rho, kappa, theta, sigma);
-            AsianOptionFixCall asianfixCall = new AsianOptionFixCall
-                (s0, var0, k, T, rf, rho, kappa, theta, sigma);
+                    (s0, var0, k, T, rf, rho, kappa, theta, sigma);
             Mtrx sPanel = simulator.drawSPath(pathCnt, 365);
-            double asianFixCallPrice = asianfixCall.priceSampleMean(sPanel);
-            textBox_asianFixCallPrice.Text = asianFixCallPrice.ToString("F4");
+            if (fixed_strike.Checked)
+            {
+                if (Ari_ave.Checked)
+                {
+                    AsianOptionFixCall asianCall = new AsianOptionFixCall
+                    (s0, var0, k, T, rf, rho, kappa, theta, sigma);
+                    AsianOptionFixPut asianPut = new AsianOptionFixPut
+                        (s0, var0, k, T, rf, rho, kappa, theta, sigma);
+                    double asianFixCallPrice = asianCall.priceSampleMean(sPanel);
+                    double asianFixPutPrice = asianPut.priceSampleMean(sPanel);
+                    textBox_asianFixCallPrice.Text = asianFixCallPrice.ToString("F4");
+                    textBox_asianFixPutPrice.Text = asianFixPutPrice.ToString("F4");
+                }
+                else if (Geo_ave.Checked)
+                {
+                    AsianOptionFixCall_Geo asianCall = new AsianOptionFixCall_Geo
+                    (s0, var0, k, T, rf, rho, kappa, theta, sigma);
+                    AsianOptionFixPut_Geo asianPut = new AsianOptionFixPut_Geo
+                        (s0, var0, k, T, rf, rho, kappa, theta, sigma);
+                    double asianFixCallPrice = asianCall.priceSampleMean(sPanel);
+                    double asianFixPutPrice = asianPut.priceSampleMean(sPanel);
+                    textBox_asianFixCallPrice.Text = asianFixCallPrice.ToString("F4");
+                    textBox_asianFixPutPrice.Text = asianFixPutPrice.ToString("F4");
+                }
+                
+            }   
+            else if (floating_strike.Checked)
+            {
+                if (Ari_ave.Checked)
+                {
+                    AsianOptionFloatCall asianCall_f = new AsianOptionFloatCall
+                    (s0, var0, k, T, rf, rho, kappa, theta, sigma);
+                    AsianOptionFloatPut asianPut_f = new AsianOptionFloatPut
+                        (s0, var0, k, T, rf, rho, kappa, theta, sigma);
+                    double asianFloatCallPrice = asianCall_f.priceSampleMean(sPanel);
+                    double asianFloatPutPrice = asianPut_f.priceSampleMean(sPanel);
+                    textBox_asianFixCallPrice.Text = asianFloatCallPrice.ToString("F4");
+                    textBox_asianFixPutPrice.Text = asianFloatPutPrice.ToString("F4");
+                }
+                else if (Geo_ave.Checked)
+                {
+                    AsianOptionFloatCall_Geo asianCall_f = new AsianOptionFloatCall_Geo
+                    (s0, var0, k, T, rf, rho, kappa, theta, sigma);
+                    AsianOptionFloatPut_Geo asianPut_f = new AsianOptionFloatPut_Geo
+                        (s0, var0, k, T, rf, rho, kappa, theta, sigma);
+                    double asianFloatCallPrice = asianCall_f.priceSampleMean(sPanel);
+                    double asianFloatPutPrice = asianPut_f.priceSampleMean(sPanel);
+                    textBox_asianFixCallPrice.Text = asianFloatCallPrice.ToString("F4");
+                    textBox_asianFixPutPrice.Text = asianFloatPutPrice.ToString("F4");
+                }
+            }
+        }
+
+        private void HestonSimulationForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void priceTest2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

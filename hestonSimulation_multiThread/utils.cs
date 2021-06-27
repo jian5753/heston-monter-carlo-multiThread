@@ -89,6 +89,16 @@ namespace hestonSimulation_multiThread
             }
             return ans / n;
         }
+        public static double GeoMean(double[] v)
+        {
+            double n = v.Length;
+            double ans = 1;
+            for(int i = 0; i < n; i++)
+            {
+                ans *= Math.Pow(v[i], 1 / n);
+            }
+            return ans;
+        }
 
         public static double Var(double[] v)
         {
