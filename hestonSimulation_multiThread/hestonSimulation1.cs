@@ -98,6 +98,7 @@ namespace hestonSimulation_multiThread
 
             VanillaCall theCall = new VanillaCall(s0, var0, k, T, rf, rho, kappa, theta, sigma);
             VanillaPut thePut = new VanillaPut(s0, var0, k, T, rf, rho, kappa, theta, sigma);
+            HestonSimulator simulator = new HestonSimulator(theCall);
 
             Stopwatch SW = new Stopwatch();
             SW.Start();
@@ -105,7 +106,7 @@ namespace hestonSimulation_multiThread
             if (seed == 0) { rv = new Random(); }
             else { rv = new Random(seed); };
 
-            double[] stArr = theCall.drawSt(pathLen, pathCnt);
+            double[] stArr = simulator.drawSt(pathLen, pathCnt);
 
 
             double callSampleMean = theCall.priceSampleMean(stArr);
@@ -182,7 +183,8 @@ namespace hestonSimulation_multiThread
             Stopwatch SW = new Stopwatch();
             SW.Start();
             VanillaOption_AmrcCall testInstance = new VanillaOption_AmrcCall(s0, var0, k, T, rf, rho, kappa, theta, sigma);
-            Mtrx tempMtrx = testInstance.drawSPath(10, 365);
+            HestonSimulator simulator = new HestonSimulator(testInstance);
+            Mtrx tempMtrx = simulator.drawSPath(10, 365);
             SW.Stop();
             double t1 = SW.ElapsedMilliseconds;
             SW.Restart();
@@ -212,7 +214,7 @@ namespace hestonSimulation_multiThread
             int pathLen = (int)(365 * T);
             #endregion
 
-            VanillaOption_heston simulator = new VanillaOption_heston
+            HestonSimulator simulator = new HestonSimulator
                     (s0, var0, k, T, rf, rho, kappa, theta, sigma);
             Mtrx sPanel = simulator.drawSPath(pathCnt, pathLen);
             if (fixed_strike.Checked)
