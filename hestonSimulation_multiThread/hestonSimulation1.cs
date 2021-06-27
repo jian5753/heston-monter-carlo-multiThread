@@ -214,7 +214,7 @@ namespace hestonSimulation_multiThread
 
             VanillaOption_heston simulator = new VanillaOption_heston
                     (s0, var0, k, T, rf, rho, kappa, theta, sigma);
-            Mtrx sPanel = simulator.drawSPath(pathCnt, 365);
+            Mtrx sPanel = simulator.drawSPath(pathCnt, pathLen);
             if (fixed_strike.Checked)
             {
                 if (Ari_ave.Checked)
