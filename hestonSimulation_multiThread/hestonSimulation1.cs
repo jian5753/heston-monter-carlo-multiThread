@@ -112,6 +112,7 @@ namespace hestonSimulation_multiThread
             double callSampleMean = theCall.priceSampleMean(stArr);
             double putSampleMean = thePut.priceSampleMean(stArr);
             double test = theCall.AmrcPrice(sPanel);
+            double test2 = thePut.AmrcPrice(sPanel);
             textBox_callPrice.Text = callSampleMean.ToString("F4");
             textBox_putPrice.Text = putSampleMean.ToString("F4");
 

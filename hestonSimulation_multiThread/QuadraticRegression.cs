@@ -42,6 +42,27 @@ namespace hestonSimulation_multiThread
             beta0 = yBar - beta1 * x1Bar - beta2 * x2Bar;
 
         }
+        public void fit(double[] y, double[] x1, bool[] subset)
+        {
+            if(subset.Length != y.Length)
+            {
+                throw new dimNotMatchException("length should be equal");
+            }
+            int subsetN = Utils.Sum(subset);
+            double[] subsetX = new double[subsetN];
+            double[] subsetY = new double[subsetN];
+            int pen = 0;
+            for (int i = 0; i < subset.Length; i ++)
+            {
+                if (subset[i])
+                {
+                    subsetX[pen] = x1[pen];
+                    subsetY[pen] = y[pen];
+                    pen += 1;
+                }
+            }
+            fit(subsetY, subsetX);
+        }
         public double predict(double x)
         {
             return beta0 + beta1 * x + beta2 * x * x;

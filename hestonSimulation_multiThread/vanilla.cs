@@ -85,14 +85,27 @@ namespace hestonSimulation_multiThread
             double dsctFactor = Math.Exp(-rf * deltaT);
             QuadraticRegression regression = new QuadraticRegression();
 
-            double[] y = Utils.Mul(payoffs(sPanel.getCol(pathLen - 1)), dsctFactor);
+            double[] y = payoffs(sPanel.getCol(pathLen - 1));
+            
             for (int i = 1; i < pathLen - 1; i++)
             {
-                double[] x = sPanel.getCol(pathLen - i - 1);
-                regression.fit(y, x);
-                double[] holdingValue = regression.predict(x);
+                int nextIdx = pathLen - i;
+                int currentIdx = nextIdx - 1;
+
+                double[] y_pv = Utils.Mul(y, dsctFactor);
+                double[] x = sPanel.getCol(currentIdx);
                 double[] exerciseValue = payoffs(x);
-                y = Utils.Max(holdingValue, exerciseValue);
+                bool[] subset = Utils.greater(exerciseValue, 0);
+                
+                regression.fit(y_pv, x, subset);
+
+                double[] holdingValue = regression.predict(x);
+                bool[] holding = Utils.greaterEqual(holdingValue, exerciseValue);
+                for(int pathIdx = 0; pathIdx < sPanel.getRowCnt(); pathIdx++)
+                {
+                    if (holding[pathIdx]){ y[pathIdx] = y_pv[pathIdx]; }
+                    else { y[pathIdx] = exerciseValue[pathIdx]; }
+                }
             }
             return Utils.Mean(y);
         }

@@ -99,6 +99,7 @@ namespace hestonSimulation_multiThread
                 double St = s0;
                 Random rv2 = new Random();
                 Random rv = new Random(range.Item1 + rv2.Next());
+                //Random rv = new Random(range.Item1);
                 // need to change seed machanism in the future
 
                 double z1;

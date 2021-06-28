@@ -20,3 +20,4 @@ C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\De
 C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.csproj.CopyComplete
 C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.exe
 C:\Users\new\heston-monter-carlo-multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.pdb
+C:\Users\jian5\OneDrive\桌面\courses\2021spring\finAlgorithm\finalTermProject\hestonSimulation_multiThread\hestonSimulation_multiThread\obj\Debug\hestonSimulation_multiThread.csprojResolveAssemblyReference.cache
