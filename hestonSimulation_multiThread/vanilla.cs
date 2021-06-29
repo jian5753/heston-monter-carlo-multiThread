@@ -30,7 +30,7 @@ namespace hestonSimulation_multiThread
         #region payoff
         public virtual double payoff(double St)
         {
-            throw new notImplementError("not implementation Err");
+            throw new NotImplementError("not implementation Err");
         } 
         public double[] payoffs(double[] stArr)
         {
@@ -53,7 +53,7 @@ namespace hestonSimulation_multiThread
         {
             double[] payoffArr = payoffs(stArr);
             double mean = Utils.Mean(payoffArr);
-            return mean / Math.Exp(-rf * T);
+            return mean * Math.Exp(-rf * T);
         }
         public double priceSampleVar(double[] stArr)
         {
@@ -81,41 +81,61 @@ namespace hestonSimulation_multiThread
         public double AmrcPriceCall(Mtrx sPanel, double k)
         {
             int pathLen = sPanel.getColCnt();
-            int pathCount = sPanel.getRowCnt();
-            double deltaT = T / pathLen;
+            double deltaT = T / (pathLen - 1);
             double dsctFactor = Math.Exp(-rf * deltaT);
             QuadraticRegression regression = new QuadraticRegression();
-            double[,] final = new double[pathLen,2];
-            for (int i = 1; i < pathCount - 1; i++)
-            {
-                final[i, 1] = 0;
-                final[i, 2] = pathCount - 1;
-            }
-            double[] y = Utils.Mul(payoffs(sPanel.getCol(pathLen - 1)), dsctFactor);
-            double[] x_reg = new double[];
 
+            double[] sTarr = sPanel.getCol(pathLen - 1);
+            double[] y = payoffs(sTarr);
+            double[] dsctPayoff = Utils.Mul(y, Math.Exp(-rf * T));
+            double ans2 = Utils.Mean(dsctPayoff);
+
+            double valueDecay = 0;
             for (int i = 1; i < pathLen - 1; i++)
+            #region forloop
             {
-                x_reg = [];
-                double[] x = sPanel.getCol(pathLen - i - 1);
-                x_reg = Utils.Max(x, k);
-                for (int j = 1; i < pathLen - 1; j++)
+                int nextIdx = pathLen - i;
+                int currentIdx = nextIdx - 1;
+
+                double[] y_pv = Utils.Mul(y, dsctFactor);
+                double[] x = sPanel.getCol(currentIdx);
+                double[] exerciseValue = payoffs(x);
+                bool[] ITM = Utils.Greater(x, k);
+
+
+                regression.fit(y_pv, x, ITM);
+                //double[] holdingValue = Utils.Mul(regression.predict(x), 1000);
+                double[] holdingValue = regression.predict(x);
+
+
+                bool[] holding = Utils.GreaterEqual(holdingValue, exerciseValue);
+                bool[] exercise = Utils.And(Utils.Not(holding), ITM);
+                int exerciseTime = 0;
+                int shittyexercise = 0;
+                double value0 = Utils.Sum(y_pv);
+                for(int pathIdx = 0; pathIdx < sPanel.getRowCnt(); pathIdx++)
                 {
-                    if (x[j] != 0) { y[j] = 0; }
-                }
-                regression.fit(y_reg, x_reg);
-                y = [];
-                double[] holdingValue = regression.predict(x_reg);
-                double[] exerciseValue = payoffs(x_reg);
-                for (int j = 1; i < pathCount - 1; j++)
-                    if (holdingValue[j]< exerciseValue[j]) 
+                    if (exercise[pathIdx])
                     {
-                        final[j, 1] = exerciseValue[j];
-                        final[j, 2] = pathLen - i - 1;
+                        exerciseTime += 1;
+                        //y[pathIdx] = y_pv[pathIdx];
+                        if (exerciseValue[pathIdx] < y_pv[pathIdx]) { shittyexercise += 1; }
+                        //y[pathIdx] = Math.Max(exerciseValue[pathIdx], y_pv[pathIdx]); 
+                        y[pathIdx] = exerciseValue[pathIdx];
                     }
-                    y[j] = Utils.Max(holdingValue, exerciseValue);
+                    else
+                    {
+                        y[pathIdx] = y_pv[pathIdx];
+                    }
+                }
+                double shittyRatio = (double)shittyexercise / (double)exerciseTime;
+                double value1 = Utils.Sum(y);
+                valueDecay += (value1 - value0);
             }
-            return Utils.Mean(y);
+            #endregion
+            double ans = Utils.Mean(y) * dsctFactor;
+
+            return ans;
         }
         #endregion
     }

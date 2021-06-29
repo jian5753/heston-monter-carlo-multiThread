@@ -6,16 +6,21 @@ using System.Threading.Tasks;
 
 namespace hestonSimulation_multiThread
 {
-    class dimNotMatchException : Exception
+    class DimNotMatchException : Exception
     {
-        public dimNotMatchException() { }
-
-        public dimNotMatchException(string msg) : base(msg) { }
+        public DimNotMatchException() { }
+        public DimNotMatchException(string msg) : base(msg) { }
     }
 
-    class notImplementError : Exception
+    class NotImplementError : Exception
     {
-        public notImplementError() { }
-        public notImplementError(string msg) : base(msg) { }
+        public NotImplementError() { }
+        public NotImplementError(string msg) : base(msg) { }
+    }
+
+    class NoDataError : Exception
+    {
+        public NoDataError() { }
+        public NoDataError(string msg) : base(msg) { }
     }
 }

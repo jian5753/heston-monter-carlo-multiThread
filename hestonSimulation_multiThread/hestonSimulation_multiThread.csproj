@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="amrcVanilla.cs" />
     <Compile Include="AsianOption.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
