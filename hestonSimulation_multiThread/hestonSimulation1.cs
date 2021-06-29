@@ -111,14 +111,26 @@ namespace hestonSimulation_multiThread
             double[] stArr = sPanel.getCol(pathLen);
             double callSampleMean = theCall.priceSampleMean(stArr);
             double putSampleMean = thePut.priceSampleMean(stArr);
+<<<<<<< HEAD
             //double test2 = thePut.AmrcPrice(sPanel);
+=======
+            SW.Stop();
+            double t1 = SW.ElapsedMilliseconds;
+
+            SW.Restart();
+            double amrcCallPrice = theCall.AmrcPrice(sPanel);
+            double amrcPutPrice = thePut.AmrcPrice(sPanel);
+            SW.Stop();
+            double t2 = SW.ElapsedMilliseconds;
+>>>>>>> 34ca6367df1407620491f1dd4885520ea5e648bc
             textBox_callPrice.Text = callSampleMean.ToString("F4");
             textBox_putPrice.Text = putSampleMean.ToString("F4");
+            textBox_amrcCallPrice.Text = amrcCallPrice.ToString("F4");
+            textBox_amrcPutPrice.Text = amrcPutPrice.ToString("F4");
 
-            SW.Stop();
-            double timeConsumption = SW.ElapsedMilliseconds;
-            msgBox.Text += $"done. time consumption {timeConsumption} ms. ";
-            msgBox.Text += $"call price: {textBox_callPrice.Text} , put price: {textBox_putPrice.Text}. \n";
+           
+            msgBox.Text += $"done. time consumption: {t1} ms for euro, {t2} ms for amrc ";
+            msgBox.Text += $"\ncall price: {textBox_callPrice.Text}, {textBox_amrcCallPrice.Text} , put price: {textBox_putPrice.Text}, {textBox_amrcPutPrice.Text}. \n";
 
             #region some theoritical verification
             /*
@@ -292,8 +304,61 @@ namespace hestonSimulation_multiThread
 
         }
 
+<<<<<<< HEAD
 
         private void button1_Click(object sender, EventArgs e)
+        {
+=======
+        private void tt_Click(object sender, EventArgs e)
+        {
+            
+            #region parse input
+            try { s0 = double.Parse(textBox_s0.Text); label26.Text = s0.ToString(); } catch { };
+            try { k = double.Parse(textBox_k.Text); label34.Text = k.ToString(); } catch { };
+            try { var0 = double.Parse(textBox_var0.Text); label33.Text = var0.ToString(); } catch { };
+            try { T = double.Parse(textBox_T.Text); label32.Text = T.ToString(); } catch { };
+            try { rf = double.Parse(textBox_rf.Text); label27.Text = rf.ToString(); } catch { };
+
+            try { rho = double.Parse(textBox_rho.Text); label28.Text = rho.ToString(); } catch { };
+            try { kappa = double.Parse(textBox_kappa.Text); label29.Text = kappa.ToString(); } catch { };
+            try { theta = double.Parse(textBox_theta.Text); label30.Text = theta.ToString(); } catch { };
+            try { sigma = double.Parse(textBox_sigma.Text); label31.Text = sigma.ToString(); } catch { };
+
+            try { pathCnt = int.Parse(textBox_pathCnt.Text); } catch { };
+            try { seed = int.Parse(textBox_seed.Text); } catch { seed = 0; };
+
+            int pathLen = (int)(365 * T);
+            #endregion
+            #region some theoritical verification
+            /*
+            VanillaCall_heston theCall = new VanillaCall_heston(s0, var0, k, T, rf, rho, kappa, theta, sigma);
+            HestonSimulator simulator = new HestonSimulator(theCall);
+
+            double[] stArr = simulator.drawSt(pathCnt, pathLen);
+            Mtrx sPanel = simulator.drawSPath(pathCnt, pathLen);
+
+            double test = theCall.AmrcPriceCall(sPanel, k);
+            testt.Text = test.ToString("F4");
+
+            double[] callPayoffs = new double[pathCnt];
+            double[] putPayoffs = new double[pathCnt];
+            double[] verify = new double[pathCnt];
+            for(int i = 0; i < pathCnt; i++)
+            {
+                callPayoffs[i] = theCall.payoff(stArr[i]);
+                putPayoffs[i] = thePut.payoff(stArr[i]);
+                verify[i] = callPayoffs[i] - putPayoffs[i] + k;
+            }*/
+>>>>>>> 34ca6367df1407620491f1dd4885520ea5e648bc
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void simulationPara_Enter(object sender, EventArgs e)
         {
 
         }

@@ -50,6 +50,7 @@ namespace hestonSimulation_multiThread
             }
             int subsetN = Utils.Sum(subset);
 
+
             if(subsetN <= 0)
             {
                 beta0 = 0; beta1 = 0; beta2 = 0;

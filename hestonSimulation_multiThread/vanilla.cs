@@ -78,7 +78,7 @@ namespace hestonSimulation_multiThread
             ans /= stArr.Length;
             return ans;
         }
-        public double AmrcPriceCall(Mtrx sPanel, double k)
+        public double AmrcPrice(Mtrx sPanel)
         {
             int pathLen = sPanel.getColCnt();
             double deltaT = T / (pathLen - 1);
@@ -90,7 +90,6 @@ namespace hestonSimulation_multiThread
             double[] dsctPayoff = Utils.Mul(y, Math.Exp(-rf * T));
             double ans2 = Utils.Mean(dsctPayoff);
 
-            double valueDecay = 0;
             for (int i = 1; i < pathLen - 1; i++)
             #region forloop
             {
@@ -100,7 +99,7 @@ namespace hestonSimulation_multiThread
                 double[] y_pv = Utils.Mul(y, dsctFactor);
                 double[] x = sPanel.getCol(currentIdx);
                 double[] exerciseValue = payoffs(x);
-                bool[] ITM = Utils.Greater(x, k);
+                bool[] ITM = Utils.Greater(exerciseValue, 0);
 
 
                 regression.fit(y_pv, x, ITM);
@@ -110,27 +109,11 @@ namespace hestonSimulation_multiThread
 
                 bool[] holding = Utils.GreaterEqual(holdingValue, exerciseValue);
                 bool[] exercise = Utils.And(Utils.Not(holding), ITM);
-                int exerciseTime = 0;
-                int shittyexercise = 0;
-                double value0 = Utils.Sum(y_pv);
                 for(int pathIdx = 0; pathIdx < sPanel.getRowCnt(); pathIdx++)
                 {
-                    if (exercise[pathIdx])
-                    {
-                        exerciseTime += 1;
-                        //y[pathIdx] = y_pv[pathIdx];
-                        if (exerciseValue[pathIdx] < y_pv[pathIdx]) { shittyexercise += 1; }
-                        //y[pathIdx] = Math.Max(exerciseValue[pathIdx], y_pv[pathIdx]); 
-                        y[pathIdx] = exerciseValue[pathIdx];
-                    }
-                    else
-                    {
-                        y[pathIdx] = y_pv[pathIdx];
-                    }
+                    if (exercise[pathIdx]){ y[pathIdx] = Math.Max(exerciseValue[pathIdx], y_pv[pathIdx]); }
+                    else{ y[pathIdx] = y_pv[pathIdx]; }
                 }
-                double shittyRatio = (double)shittyexercise / (double)exerciseTime;
-                double value1 = Utils.Sum(y);
-                valueDecay += (value1 - value0);
             }
             #endregion
             double ans = Utils.Mean(y) * dsctFactor;
