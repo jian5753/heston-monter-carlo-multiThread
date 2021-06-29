@@ -111,7 +111,6 @@ namespace hestonSimulation_multiThread
             double[] stArr = sPanel.getCol(pathLen);
             double callSampleMean = theCall.priceSampleMean(stArr);
             double putSampleMean = thePut.priceSampleMean(stArr);
-            double test = theCall.AmrcPrice(sPanel);
             //double test2 = thePut.AmrcPrice(sPanel);
             textBox_callPrice.Text = callSampleMean.ToString("F4");
             textBox_putPrice.Text = putSampleMean.ToString("F4");
@@ -293,54 +292,10 @@ namespace hestonSimulation_multiThread
 
         }
 
-        private void tt_Click(object sender, EventArgs e)
+
+        private void button1_Click(object sender, EventArgs e)
         {
-            #region parse input
-            try { s0 = double.Parse(textBox_s0.Text); label26.Text = s0.ToString(); } catch { };
-            try { k = double.Parse(textBox_k.Text); label34.Text = k.ToString(); } catch { };
-            try { var0 = double.Parse(textBox_var0.Text); label33.Text = var0.ToString(); } catch { };
-            try { T = double.Parse(textBox_T.Text); label32.Text = T.ToString(); } catch { };
-            try { rf = double.Parse(textBox_rf.Text); label27.Text = rf.ToString(); } catch { };
 
-            try { rho = double.Parse(textBox_rho.Text); label28.Text = rho.ToString(); } catch { };
-            try { kappa = double.Parse(textBox_kappa.Text); label29.Text = kappa.ToString(); } catch { };
-            try { theta = double.Parse(textBox_theta.Text); label30.Text = theta.ToString(); } catch { };
-            try { sigma = double.Parse(textBox_sigma.Text); label31.Text = sigma.ToString(); } catch { };
-
-            try { pathCnt = int.Parse(textBox_pathCnt.Text); } catch { };
-            try { seed = int.Parse(textBox_seed.Text); } catch { seed = 0; };
-
-            int pathLen = (int)(365 * T);
-            #endregion
-            VanillaCall_heston theCall = new VanillaCall_heston(s0, var0, k, T, rf, rho, kappa, theta, sigma);
-            HestonSimulator simulator = new HestonSimulator(theCall);
-
-            double[] stArr = simulator.drawSt(pathCnt, pathLen);
-            Mtrx sPanel = simulator.drawSPath(pathCnt, pathLen);
-
-            double test = theCall.AmrcPriceCall(sPanel, k);
-            testt.Text = test.ToString("F4");
-
-
-
-
-            #region some theoritical verification
-            /*
-            double[] callPayoffs = new double[pathCnt];
-            double[] putPayoffs = new double[pathCnt];
-            double[] verify = new double[pathCnt];
-            for(int i = 0; i < pathCnt; i++)
-            {
-                callPayoffs[i] = theCall.payoff(stArr[i]);
-                putPayoffs[i] = thePut.payoff(stArr[i]);
-                verify[i] = callPayoffs[i] - putPayoffs[i] + k;
-            }*/
-
-            // put call parity
-            //double parityLeft = putSampleMean + s0;
-            //double parityRight = callSampleMean + k *  Math.Exp(-rf * T);
-            #endregion
-            msgBox.Text += "";
         }
     }
 }
