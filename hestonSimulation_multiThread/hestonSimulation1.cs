@@ -111,9 +111,6 @@ namespace hestonSimulation_multiThread
             double[] stArr = sPanel.getCol(pathLen);
             double callSampleMean = theCall.priceSampleMean(stArr);
             double putSampleMean = thePut.priceSampleMean(stArr);
-<<<<<<< HEAD
-            //double test2 = thePut.AmrcPrice(sPanel);
-=======
             SW.Stop();
             double t1 = SW.ElapsedMilliseconds;
 
@@ -122,7 +119,6 @@ namespace hestonSimulation_multiThread
             double amrcPutPrice = thePut.AmrcPrice(sPanel);
             SW.Stop();
             double t2 = SW.ElapsedMilliseconds;
->>>>>>> 34ca6367df1407620491f1dd4885520ea5e648bc
             textBox_callPrice.Text = callSampleMean.ToString("F4");
             textBox_putPrice.Text = putSampleMean.ToString("F4");
             textBox_amrcCallPrice.Text = amrcCallPrice.ToString("F4");
@@ -304,11 +300,6 @@ namespace hestonSimulation_multiThread
 
         }
 
-<<<<<<< HEAD
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-=======
         private void tt_Click(object sender, EventArgs e)
         {
             
@@ -349,8 +340,12 @@ namespace hestonSimulation_multiThread
                 putPayoffs[i] = thePut.payoff(stArr[i]);
                 verify[i] = callPayoffs[i] - putPayoffs[i] + k;
             }*/
->>>>>>> 34ca6367df1407620491f1dd4885520ea5e648bc
 
+            // put call parity
+            //double parityLeft = putSampleMean + s0;
+            //double parityRight = callSampleMean + k *  Math.Exp(-rf * T);
+            #endregion
+            msgBox.Text += "";
         }
 
         private void label12_Click(object sender, EventArgs e)
