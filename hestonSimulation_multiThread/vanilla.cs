@@ -78,7 +78,7 @@ namespace hestonSimulation_multiThread
             ans /= stArr.Length;
             return ans;
         }
-        public double AmrcPriceCall(Mtrx sPanel, double k)
+        public double AmrcPrice(Mtrx sPanel)
         {
             int pathLen = sPanel.getColCnt();
             double deltaT = T / (pathLen - 1);
@@ -120,8 +120,8 @@ namespace hestonSimulation_multiThread
                         exerciseTime += 1;
                         //y[pathIdx] = y_pv[pathIdx];
                         if (exerciseValue[pathIdx] < y_pv[pathIdx]) { shittyexercise += 1; }
-                        //y[pathIdx] = Math.Max(exerciseValue[pathIdx], y_pv[pathIdx]); 
-                        y[pathIdx] = exerciseValue[pathIdx];
+                        y[pathIdx] = Math.Max(exerciseValue[pathIdx], y_pv[pathIdx]); 
+                        
                     }
                     else
                     {

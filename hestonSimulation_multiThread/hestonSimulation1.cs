@@ -111,10 +111,13 @@ namespace hestonSimulation_multiThread
             double[] stArr = sPanel.getCol(pathLen);
             double callSampleMean = theCall.priceSampleMean(stArr);
             double putSampleMean = thePut.priceSampleMean(stArr);
-            double test = theCall.AmrcPrice(sPanel);
+            double amrcCallPrice = theCall.AmrcPrice(sPanel);
+            double amrcPutPrice = thePut.AmrcPrice(sPanel);
             //double test2 = thePut.AmrcPrice(sPanel);
             textBox_callPrice.Text = callSampleMean.ToString("F4");
             textBox_putPrice.Text = putSampleMean.ToString("F4");
+            textBox_amrcCallPrice.Text = amrcCallPrice.ToString("F4");
+            textBox_amrcPutPrice.Text = amrcPutPrice.ToString("F4");
 
             SW.Stop();
             double timeConsumption = SW.ElapsedMilliseconds;
@@ -295,6 +298,7 @@ namespace hestonSimulation_multiThread
 
         private void tt_Click(object sender, EventArgs e)
         {
+            
             #region parse input
             try { s0 = double.Parse(textBox_s0.Text); label26.Text = s0.ToString(); } catch { };
             try { k = double.Parse(textBox_k.Text); label34.Text = k.ToString(); } catch { };
@@ -312,6 +316,8 @@ namespace hestonSimulation_multiThread
 
             int pathLen = (int)(365 * T);
             #endregion
+            #region some theoritical verification
+            /*
             VanillaCall_heston theCall = new VanillaCall_heston(s0, var0, k, T, rf, rho, kappa, theta, sigma);
             HestonSimulator simulator = new HestonSimulator(theCall);
 
@@ -321,11 +327,6 @@ namespace hestonSimulation_multiThread
             double test = theCall.AmrcPriceCall(sPanel, k);
             testt.Text = test.ToString("F4");
 
-
-
-
-            #region some theoritical verification
-            /*
             double[] callPayoffs = new double[pathCnt];
             double[] putPayoffs = new double[pathCnt];
             double[] verify = new double[pathCnt];
@@ -341,6 +342,11 @@ namespace hestonSimulation_multiThread
             //double parityRight = callSampleMean + k *  Math.Exp(-rf * T);
             #endregion
             msgBox.Text += "";
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
