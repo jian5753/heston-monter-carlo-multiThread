@@ -120,6 +120,20 @@ namespace hestonSimulation_multiThread
             double v2Bar = Mean(v2);
             return Mean(Mul(Sub(v1, v1Bar), Sub(v2, v2Bar)));
         }
+        public static double[] Max(double[] v1, double v2)
+        {
+            double[] ans = new double[v1.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v1.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = Math.Max(v1[i], 0);
+                }
+            });
+            return ans;
+        }
         public static double[] Max(double[] v1, double[] v2)
         {
             if (v1.Length != v2.Length)

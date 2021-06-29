@@ -78,21 +78,42 @@ namespace hestonSimulation_multiThread
             ans /= stArr.Length;
             return ans;
         }
-        public double AmrcPrice(Mtrx sPanel)
+        public double AmrcPriceCall(Mtrx sPanel, double k)
         {
             int pathLen = sPanel.getColCnt();
+            int pathCount = sPanel.getRowCnt();
             double deltaT = T / pathLen;
             double dsctFactor = Math.Exp(-rf * deltaT);
             QuadraticRegression regression = new QuadraticRegression();
-
+            double[,] final = new double[pathLen,2];
+            for (int i = 1; i < pathCount - 1; i++)
+            {
+                final[i, 1] = 0;
+                final[i, 2] = pathCount - 1;
+            }
             double[] y = Utils.Mul(payoffs(sPanel.getCol(pathLen - 1)), dsctFactor);
+            double[] x_reg = new double[];
+
             for (int i = 1; i < pathLen - 1; i++)
             {
+                x_reg = [];
                 double[] x = sPanel.getCol(pathLen - i - 1);
-                regression.fit(y, x);
-                double[] holdingValue = regression.predict(x);
-                double[] exerciseValue = payoffs(x);
-                y = Utils.Max(holdingValue, exerciseValue);
+                x_reg = Utils.Max(x, k);
+                for (int j = 1; i < pathLen - 1; j++)
+                {
+                    if (x[j] != 0) { y[j] = 0; }
+                }
+                regression.fit(y_reg, x_reg);
+                y = [];
+                double[] holdingValue = regression.predict(x_reg);
+                double[] exerciseValue = payoffs(x_reg);
+                for (int j = 1; i < pathCount - 1; j++)
+                    if (holdingValue[j]< exerciseValue[j]) 
+                    {
+                        final[j, 1] = exerciseValue[j];
+                        final[j, 2] = pathLen - i - 1;
+                    }
+                    y[j] = Utils.Max(holdingValue, exerciseValue);
             }
             return Utils.Mean(y);
         }
