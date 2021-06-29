@@ -111,18 +111,22 @@ namespace hestonSimulation_multiThread
             double[] stArr = sPanel.getCol(pathLen);
             double callSampleMean = theCall.priceSampleMean(stArr);
             double putSampleMean = thePut.priceSampleMean(stArr);
+            SW.Stop();
+            double t1 = SW.ElapsedMilliseconds;
+
+            SW.Restart();
             double amrcCallPrice = theCall.AmrcPrice(sPanel);
             double amrcPutPrice = thePut.AmrcPrice(sPanel);
-            //double test2 = thePut.AmrcPrice(sPanel);
+            SW.Stop();
+            double t2 = SW.ElapsedMilliseconds;
             textBox_callPrice.Text = callSampleMean.ToString("F4");
             textBox_putPrice.Text = putSampleMean.ToString("F4");
             textBox_amrcCallPrice.Text = amrcCallPrice.ToString("F4");
             textBox_amrcPutPrice.Text = amrcPutPrice.ToString("F4");
 
-            SW.Stop();
-            double timeConsumption = SW.ElapsedMilliseconds;
-            msgBox.Text += $"done. time consumption {timeConsumption} ms. ";
-            msgBox.Text += $"call price: {textBox_callPrice.Text} , put price: {textBox_putPrice.Text}. \n";
+           
+            msgBox.Text += $"done. time consumption: {t1} ms for euro, {t2} ms for amrc ";
+            msgBox.Text += $"\ncall price: {textBox_callPrice.Text}, {textBox_amrcCallPrice.Text} , put price: {textBox_putPrice.Text}, {textBox_amrcPutPrice.Text}. \n";
 
             #region some theoritical verification
             /*
@@ -345,6 +349,11 @@ namespace hestonSimulation_multiThread
         }
 
         private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void simulationPara_Enter(object sender, EventArgs e)
         {
 
         }

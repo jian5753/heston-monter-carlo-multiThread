@@ -100,7 +100,7 @@ namespace hestonSimulation_multiThread
                 double[] y_pv = Utils.Mul(y, dsctFactor);
                 double[] x = sPanel.getCol(currentIdx);
                 double[] exerciseValue = payoffs(x);
-                bool[] ITM = Utils.Greater(x, k);
+                bool[] ITM = Utils.Greater(exerciseValue, 0);
 
 
                 regression.fit(y_pv, x, ITM);
@@ -119,9 +119,9 @@ namespace hestonSimulation_multiThread
                     {
                         exerciseTime += 1;
                         //y[pathIdx] = y_pv[pathIdx];
-                        if (exerciseValue[pathIdx] < y_pv[pathIdx]) { shittyexercise += 1; }
+                        if (exerciseValue[pathIdx] <= y_pv[pathIdx]) { shittyexercise += 1; }
                         y[pathIdx] = Math.Max(exerciseValue[pathIdx], y_pv[pathIdx]); 
-                        
+                        //y[pathIdx] = exerciseValue[pathIdx];
                     }
                     else
                     {
