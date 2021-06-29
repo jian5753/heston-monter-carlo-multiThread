@@ -25,7 +25,7 @@ namespace hestonSimulation_multiThread
         {
             if(y.Length != x1.Length)
             {
-                throw new dimNotMatchException("length of Y should equals to that of X");
+                throw new DimNotMatchException("length of Y should equals to that of X");
             }
             double[] x2 = Utils.Power(x1, 2);
             double yBar = Utils.Mean(y);
@@ -46,22 +46,30 @@ namespace hestonSimulation_multiThread
         {
             if(subset.Length != y.Length)
             {
-                throw new dimNotMatchException("length should be equal");
+                throw new DimNotMatchException("length should be equal");
             }
             int subsetN = Utils.Sum(subset);
-            double[] subsetX = new double[subsetN];
-            double[] subsetY = new double[subsetN];
-            int pen = 0;
-            for (int i = 0; i < subset.Length; i ++)
+
+            if(subsetN <= 0)
             {
-                if (subset[i])
+                beta0 = 0; beta1 = 0; beta2 = 0;
+            }else
+            {
+                double[] subsetX = new double[subsetN];
+                double[] subsetY = new double[subsetN];
+                int pen = 0;
+                for (int i = 0; i < subset.Length; i++)
                 {
-                    subsetX[pen] = x1[pen];
-                    subsetY[pen] = y[pen];
-                    pen += 1;
+                    if (subset[i])
+                    {
+                        subsetX[pen] = x1[pen];
+                        subsetY[pen] = y[pen];
+                        pen += 1;
+                    }
                 }
+                fit(subsetY, subsetX);
             }
-            fit(subsetY, subsetX);
+            
         }
         public double predict(double x)
         {

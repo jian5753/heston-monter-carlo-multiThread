@@ -20,21 +20,21 @@ namespace hestonSimulation_multiThread
         #region hide path indep payoff function
         public override double payoff(double St)
         {
-            throw new notImplementError("can not pass only St to get payoff for path dependent option");
+            throw new NotImplementError("can not pass only St to get payoff for path dependent option");
         }
         public new double[] payoffs(double[] stArr)
         {
-            throw new notImplementError("can not pass only St to get payoff for path dependent option");
+            throw new NotImplementError("can not pass only St to get payoff for path dependent option");
         }
         public new double priceSampleMean(double[] stArr)
         {
-            throw new notImplementError("can not pass only St to get payoff for path dependent option");
+            throw new NotImplementError("can not pass only St to get payoff for path dependent option");
         }
         #endregion
         #region new payoff function for path dep
         public virtual double payoff(double[] sPath)
         {
-            throw new notImplementError("not implementation Err");
+            throw new NotImplementError("not implementation Err");
         }
         public double[] payoffs(Mtrx sPanel)
         {

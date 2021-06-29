@@ -106,13 +106,13 @@ namespace hestonSimulation_multiThread
             if (seed == 0) { rv = new Random(); }
             else { rv = new Random(seed); };
 
-            double[] stArr = simulator.drawSt(pathCnt, pathLen);
+            //double[] stArr = simulator.drawSt(pathCnt, pathLen);
             Mtrx sPanel = simulator.drawSPath(pathCnt, pathLen);
-
+            double[] stArr = sPanel.getCol(pathLen);
             double callSampleMean = theCall.priceSampleMean(stArr);
             double putSampleMean = thePut.priceSampleMean(stArr);
             double test = theCall.AmrcPrice(sPanel);
-            double test2 = thePut.AmrcPrice(sPanel);
+            //double test2 = thePut.AmrcPrice(sPanel);
             textBox_callPrice.Text = callSampleMean.ToString("F4");
             textBox_putPrice.Text = putSampleMean.ToString("F4");
 
@@ -182,6 +182,7 @@ namespace hestonSimulation_multiThread
 
         private void buttonForTest_Click(object sender, EventArgs e)
         {
+            /*
             Stopwatch SW = new Stopwatch();
             SW.Start();
             VanillaOption_AmrcCall testInstance = new VanillaOption_AmrcCall(s0, var0, k, T, rf, rho, kappa, theta, sigma);
@@ -193,7 +194,7 @@ namespace hestonSimulation_multiThread
             double ans = testInstance.meanPrice(ref tempMtrx);
             SW.Stop();
             double t2 = SW.ElapsedMilliseconds;
-
+            */
         }
 
         private void aisanOption_price_Click(object sender, EventArgs e)

@@ -27,7 +27,7 @@ namespace hestonSimulation_multiThread
         {
             if (v1.Length != v2.Length)
             {
-                throw new dimNotMatchException("v1.Length != v2.Length");
+                throw new DimNotMatchException("v1.Length != v2.Length");
             }
 
             double[] ans = new double[v1.Length];
@@ -38,6 +38,20 @@ namespace hestonSimulation_multiThread
                 for (int i = range.Item1; i < range.Item2; i++)
                 {
                     ans[i] = v1[i] + v2[i];
+                }
+            });
+            return ans;
+        }
+        public static double[] Add(double[] v1, double c)
+        {
+            double[] ans = new double[v1.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v1.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = v1[i] + c;
                 }
             });
             return ans;
@@ -60,7 +74,7 @@ namespace hestonSimulation_multiThread
         {
             if (v1.Length != v2.Length)
             {
-                throw new dimNotMatchException("v1.Length != v2.Length");
+                throw new DimNotMatchException("v1.Length != v2.Length");
             }
 
             double[] ans = new double[v1.Length];
@@ -138,7 +152,7 @@ namespace hestonSimulation_multiThread
         {
             if (v1.Length != v2.Length)
             {
-                throw new dimNotMatchException("v1.Length != v2.Length");
+                throw new DimNotMatchException("v1.Length != v2.Length");
             }
 
             double[] ans = new double[v1.Length];
@@ -153,7 +167,7 @@ namespace hestonSimulation_multiThread
             });
             return ans;
         }
-        public static bool[] greaterEqual(double[] v1, double c)
+        public static bool[] GreaterEqual(double[] v1, double c)
         {
             bool[] ans = new bool[v1.Length];
             ParallelOptions parallelOpts = new ParallelOptions();
@@ -167,7 +181,7 @@ namespace hestonSimulation_multiThread
             });
             return ans;
         }
-        public static bool[] greaterEqual(double[] v1, double[] v2)
+        public static bool[] GreaterEqual(double[] v1, double[] v2)
         {
             bool[] ans = new bool[v1.Length];
             ParallelOptions parallelOpts = new ParallelOptions();
@@ -181,7 +195,7 @@ namespace hestonSimulation_multiThread
             });
             return ans;
         }
-        public static bool[] greater(double[] v1, double c)
+        public static bool[] Greater(double[] v1, double c)
         {
             bool[] ans = new bool[v1.Length];
             ParallelOptions parallelOpts = new ParallelOptions();
@@ -191,6 +205,52 @@ namespace hestonSimulation_multiThread
                 for (int i = range.Item1; i < range.Item2; i++)
                 {
                     ans[i] = v1[i] > c;
+                }
+            });
+            return ans;
+        }
+        public static bool[] Not(bool[] v1)
+        {
+            bool[] ans = new bool[v1.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v1.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = !v1[i];
+                }
+            });
+            return ans;
+        }
+        public static bool[] And(bool[] v1, bool[]v2)
+        {
+            if (v1.Length != v2.Length)
+            {
+                throw new DimNotMatchException("v1.Length != v2.Length");
+            }
+            bool[] ans = new bool[v1.Length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, v1.Length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = v1[i] & v2[i];
+                }
+            });
+            return ans;
+        }
+        public static double[] Rep(double c, int length)
+        {
+            double[] ans = new double[length];
+            ParallelOptions parallelOpts = new ParallelOptions();
+            parallelOpts.MaxDegreeOfParallelism = 8;
+            Parallel.ForEach(Partitioner.Create(0, length), parallelOpts, range =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    ans[i] = c;
                 }
             });
             return ans;
